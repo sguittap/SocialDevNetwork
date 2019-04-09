@@ -1,0 +1,33 @@
+{
+  "name": "socialdevnetwork",
+  "version": "1.0.0",
+  "description": "social network for job seeking developers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sguittap/SocialDevNetwork.git"
+  },
+  "author": "shane guittap",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sguittap/SocialDevNetwork/issues"
+  },
+  "homepage": "https://github.com/sguittap/SocialDevNetwork#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.11"
+  }
+}
