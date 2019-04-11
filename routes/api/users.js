@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
 const validateRegisterInput = require('../../validation/register')
+const validateLoginInput = require('../../validation/login')
 
 //GET route: /api/users/test
 router.get('/test', (req,res) => res.json({msg:'Users works'}));
@@ -21,7 +22,8 @@ router.post('/register', (req, res) => {
     User.findOne({email:req.body.email})
         .then(user => {
             if(user){
-                return res.status(400).json({email:'Email already exists'})
+                errors.email = 'Email already exists'
+                return res.status(400).json(errors)
             } else{
                 const avatar = gravatar.url(req.body.email,{
                     s:'200', r:'pg', d:'mm'
@@ -47,12 +49,17 @@ router.post('/register', (req, res) => {
 
 //Login User
 router.post('/login', (req, res) => {
+    const {errors, isValid} = validateLoginInput(req.body);
+    if(!isValid){
+        return res.status(400).json(errors)
+    };
     const email = req.body.email;    
     const password = req.body.password;    
     User.findOne({email})
         .then(user => {
             if(!user){
-                return res.status(404).json({email:'User not found'})
+                errors.email = 'User not found'
+                return res.status(404).json(errors)
             }
             bcrypt.compare(password, user.password)
                 .then(isMatch => {
@@ -62,7 +69,8 @@ router.post('/login', (req, res) => {
                             res.json({success: true, token: 'Bearer ' + token});
                         });
                     } else {
-                        return res.status(400).json({password:'Password incorrect'})
+                        errors.password = 'Password incorrect';
+                        return res.status(400).json(errors)
                     }
                 })
         })
