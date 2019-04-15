@@ -23,8 +23,54 @@ router. get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
             };
             res.json(profile)
         })
-        .catch(err => res.status(404).json('Error in finding profile -->' + err))
-})
+        .catch(err => res.status(404).json(err))
+});
+
+//GET route: /api/profile/all
+router.get('/all', (req, res) => {
+    const errors = {};
+    Profile.find()
+        .populate('user', ['name', 'avatar'])
+        .then(profiles => {
+            if(!profiles){
+                errors.noprofile = 'There are no profiles'
+                return res.status(404).json(errors)
+            }
+            res.json(profiles)
+        })
+        .catch(err => res.status(404).json({profile: 'There are no profiles'}))
+});
+
+//GET route: /api/handle/:handle
+router.get('/handle/:handle', (req, res) => {
+    const errors = {};
+    Profile.findOne({handle: req.params.handle})
+        .populate('user', ['name', 'avatar'])
+        .then(profile => {
+            if(!profile){
+                errors.noprofile = 'There is no profile for this User';
+                 return res.status(404).json(errors)
+            }
+            res.json(profile)
+        })
+        .catch(err => res.status(404).json(err))
+});
+
+//GET route: /api/user/:user_id
+router.get('/user/:user_id', (req, res) => {
+    const errors = {};
+    Profile.findOne({user: req.params.user_id})
+        .populate('user', ['name', 'avatar'])
+        .then(profile => {
+            if(!profile){
+                errors.noprofile = 'There is no profile for this User';
+                 return res.status(404).json(errors)
+            }
+            res.json(profile)
+        })
+        .catch(err => res.status(404).json({profile: 'There is no profile for this user'}))
+});
+
 
 //Create/Edit User profile
 router. post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -68,6 +114,6 @@ router. post('/', passport.authenticate('jwt', {session: false}), (req, res) => 
                 })
         }
     })
-})
+});
 
 module.exports = router;
