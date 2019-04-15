@@ -19,7 +19,7 @@ const profileSchema = new Schema({
         from:{type: Date, required: true},
         to:{type: Date},
         current:{type: Boolean, default: false},
-        descrition:{type: String}
+        description:{type: String}
     }],
     education:[{
         school:{type: String, required: true}, 
@@ -28,7 +28,7 @@ const profileSchema = new Schema({
         from:{type: Date, required: true},
         to:{type: Date},
         current:{type: Boolean, default: false},
-        descrition:{type: String}
+        description:{type: String}
     }],
     social:{
         youtube:{type:String},

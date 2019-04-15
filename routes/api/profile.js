@@ -6,6 +6,8 @@ const passport = require('passport');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const validateProfileInput = require('../../validation/profile');
+const validateExperienceInput = require('../../validation/experience');
+const validateEducationInput = require('../../validation/education');
 
 
 //GET route: /api/profile/test
@@ -73,7 +75,7 @@ router.get('/user/:user_id', (req, res) => {
 
 
 //Create/Edit User profile
-router. post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
+router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     const {errors, isValid} = validateProfileInput(req.body);
     if(!isValid){
         return res.status(400).json(errors)
@@ -114,6 +116,50 @@ router. post('/', passport.authenticate('jwt', {session: false}), (req, res) => 
                 })
         }
     })
+});
+
+//POST route api/profile/experience
+router.post('/experience', passport.authenticate('jwt', {session:false}), (req,res) => {
+    const {errors, isValid} = validateExperienceInput(req.body);
+    if(!isValid){
+       return res.status(400).json(errors)
+    };
+    Profile.findOne({user: req.user.id})
+        .then(profile => {
+            const newExp = {
+                title: req.body.title,
+                company: req.body.company,
+                location: req.body.location,
+                from: req.body.from,
+                to: req.body.to,
+                current: req.body.current,
+                description: req.body.description
+            }
+            profile.experience.unshift(newExp);
+            profile.save().then(profile => res.json(profile));
+        })
+});
+
+//POST route api/profile/education
+router.post('/education', passport.authenticate('jwt', {session:false}), (req,res) => {
+    const {errors, isValid} = validateEducationInput(req.body);
+    if(!isValid){
+       return res.status(400).json(errors)
+    };
+    Profile.findOne({user: req.user.id})
+        .then(profile => {
+            const newEdu = {
+                school: req.body.school,
+                degree: req.body.degree,
+                fieldofstudy: req.body.fieldofstudy,
+                from: req.body.from,
+                to: req.body.to,
+                current: req.body.current,
+                description: req.body.description
+            }
+            profile.education.unshift(newEdu);
+            profile.save().then(profile => res.json(profile));
+        })
 });
 
 module.exports = router;
