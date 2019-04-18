@@ -8,17 +8,15 @@ class Register extends Component {
             email: '',
             password: '',
             password2: '',
-            errors: '',
+            errors: {},
         };
-        this.onChange = this.onChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
     };
 
-    onChange(e){
+    onChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
     };
 
-    onSubmit(e){
+    onSubmit = (e) => {
         e.preventDefault();
         const newUser = {
             name: this.state.name,
@@ -36,7 +34,7 @@ class Register extends Component {
           <div className="row">
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Sign Up</h1>
-              <p className="lead text-center">Create your DevConnector account</p>
+              <p className="lead text-center">Create your DevNetwork account</p>
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <input type="text"
