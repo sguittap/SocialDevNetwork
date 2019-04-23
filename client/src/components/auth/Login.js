@@ -6,37 +6,43 @@ import {loginUser} from '../../actions/authActions';
 
 
 class Login extends Component {
-    constructor(){
-        super();
-        this.state = {
-            email: '',
-            password: '',
-            errors: {},
-        };  
+  constructor(){
+      super();
+      this.state = {
+          email: '',
+          password: '',
+          errors: {},
+      };  
+  };
+
+  componentDidMount(){
+    if(this.props.auth.isAuthenticated){
+      this.props.history.push('/dashboard')
+    };
+  };
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.auth.isAuthenticated){
+      this.props.history.push('/dashboard')
     };
 
-    componentWillReceiveProps(nextProps){
-      if(nextProps.auth.isAuthenticated){
-        this.props.history.push('/dashboard')
+    if(nextProps.errors){
+      this.setState({errors: nextProps.errors})
+    };
+  };
+
+  onChange = (e) => {
+      this.setState({[e.target.name]: e.target.value})
+  };
+
+  onSubmit = (e) => {
+      e.preventDefault();
+      const userData = {
+          email: this.state.email,
+          password: this.state.password,
       };
-
-      if(nextProps.errors){
-        this.setState({errors: nextProps.errors})
-      };
-    };
-
-    onChange = (e) => {
-        this.setState({[e.target.name]: e.target.value})
-    };
-
-    onSubmit = (e) => {
-        e.preventDefault();
-        const userData = {
-            email: this.state.email,
-            password: this.state.password,
-        };
-        this.props.loginUser(userData)
-    };
+      this.props.loginUser(userData)
+  };
         
   render() {
 
@@ -76,7 +82,6 @@ class Login extends Component {
           </div>
         </div>
       </div>
-    
     )
   }
 };
