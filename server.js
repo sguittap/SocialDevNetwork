@@ -17,9 +17,18 @@ app.use(bodyParser.json());
 //DB config
 const db = require('./config/keys').mongoURI;
 //Connecting to DB
-mongoose.connect(db, {useNewUrlParser: true})
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(`Error connecting --> ${err}`));
+const connectDB = async() => {
+    try{
+        await mongoose.connect(db, {useNewUrlParser: true});
+        console.log('MongoDB connected');
+    } catch(err) {
+        console.log(`Error connecting --> ${err.message}`);
+        process.exit(1);
+    }
+}
+// mongoose.connect(db, {useNewUrlParser: true})
+//     .then(() => console.log('MongoDB connected'))
+//     .catch(err => console.log(`Error connecting --> ${err}`));
 
 //Passport middleware
 app.use(passport.initialize());
