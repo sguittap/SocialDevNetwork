@@ -10,22 +10,23 @@ require('dotenv').config();
 
 const app = express();
 
-//BodyParser middleware
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParser.json());
+//middleware
+// app.use(bodyParser.urlencoded({extended:false}));
+// app.use(bodyParser.json());
+app.use(express.json({extended:false}))
 
 //DB config
 const db = require('./config/keys').mongoURI;
 //Connecting to DB
 const connectDB = async() => {
     try{
-        await mongoose.connect(db, {useNewUrlParser: true});
+        await mongoose.connect(db, {useNewUrlParser: true, useCreateIndex:true});
         console.log('MongoDB connected');
     } catch(err) {
         console.log(`Error connecting --> ${err.message}`);
         process.exit(1);
     }
-}
+};
 // mongoose.connect(db, {useNewUrlParser: true})
 //     .then(() => console.log('MongoDB connected'))
 //     .catch(err => console.log(`Error connecting --> ${err}`));
