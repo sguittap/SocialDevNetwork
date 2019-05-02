@@ -129,5 +129,45 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
     };
 });
 
+//Add profile education
+router.put('/education', [auth,[
+    check('school', 'School is required').not().isEmpty(),
+    check('degree', 'Degree is required').not().isEmpty(),
+    check('fieldofstudy', 'Field of Study date is required').not().isEmpty(),
+    check('from', 'From date is required').not().isEmpty(),
+]], async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array()})
+    }
+    const {school, degree, fieldofstudy, from, to, current, description} = req.body;
+    const newEdu = {school, degree, fieldofstudy, from, to, current, description};
+    try {
+        const profile = await Profile.findOne({user: req.user.id});
+        if(!profile){
+            return res.json({msg:'You have no profile'})
+        };
+        profile.education.unshift(newEdu);
+        await profile.save();
+        res.json(profile);
+    } catch (err) {
+        console.log(err)
+        res.status(500).send('Server Error')
+    }
+});
+
+//Delete experience
+router.delete('/education/:exp_id', auth, async (req, res) => {
+    try {
+        const profile = await Profile.findOne({user: req.user.id});
+        const removeIndex = profile.education.map(item => item.id.indexOf(req.params.exp_id));
+        profile.education.splice(removeIndex, 1);
+        await profile.save();
+        res.json(profile)
+    } catch (err) {
+        res.status(500).send('Server Error')
+    };
+});
+
 
 module.exports = router;
