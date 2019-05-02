@@ -70,9 +70,21 @@ router.get('/', async (req, res) => {
 //Get profile by id
 router.get('/user/:user_id', async (req, res) => {
     try {
-        const profile =  await Profile.findOne({user: req.params.user_id}).populate('users', ['name', 'avatar']);
-        if(!profile) return res.status(400).json({msg:'There is no profile for this user'})
+        const profile = await Profile.findOne({user: req.params.user_id}).populate('users', ['name', 'avatar']);
+        if(!profile) return res.status(400).json({msg:'Profile not found'})
         res.json(profile);
+    } catch (err) {
+        if(err.kind === 'ObjectId') return res.status(400).json({msg:'Profile not found'})
+        res.status(500).send('Server Error')
+    };
+});
+
+//Delete profile, user, and posts
+router.delete('/', auth, async (req, res) => {
+    try {
+        await Profile.findOneAndRemove({user: req.user.id});
+        await User.findOneAndRemove({_id: req.user.id});
+        res.json({msg:'User Deleted'});
     } catch (err) {
         res.status(500).send('Server Error')
     };

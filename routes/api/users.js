@@ -27,14 +27,14 @@ router.post('/', [
         });
         user = new User({name, email, password, avatar});
         let salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(passpword, salt);
+        user.password = await bcrypt.hash(password, salt);
         await user.save();
         const payload = {
             user:{id:user.id}
         };
-        jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 3600},() => {
+        jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 3600},(err, token) => {
             if(err) throw err;
-            res.json({token})
+            res.json({token});
         });
     } catch(err){
         res.status(500).send('Server Error')
