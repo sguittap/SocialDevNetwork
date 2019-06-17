@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {GET_PROFILE,GET_PROFILES, PROFILE_ERROR, UPDATE_PROFILE, ACCOUNT_DELETED, CLEAR_PROFILE, GET_REPOS} from './types';
+import {GET_PROFILE, GET_PROFILES, PROFILE_ERROR, UPDATE_PROFILE, ACCOUNT_DELETED, CLEAR_PROFILE, GET_REPOS} from './types';
 import {setAlert} from './alert';
 
 export const getCurrentProfile = () => async dispatch => {

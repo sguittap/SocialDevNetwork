@@ -22,7 +22,7 @@ router.post('/', [
         if(user){
             return res.status(400).json({errors:[{msg:'User already exists'}]})
         };
-        const avatar = gravatar.url(req.body.email,{
+        const avatar = gravatar.url(email,{
             s:'200', r:'pg', d:'mm'
         });
         user = new User({name, email, password, avatar});
@@ -37,7 +37,7 @@ router.post('/', [
             res.json({token});
         });
     } catch(err){
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-failed to register newUser')
     };
 });
 

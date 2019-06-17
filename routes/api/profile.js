@@ -10,13 +10,13 @@ const {check, validationResult} = require ('express-validator/check');
 //Current user Profile
 router. get('/me', auth, async (req, res) => {
     try{
-        const profile = await Profile.findOne({user: req.user.id}).populate('users', ['name', 'avatar']);
+        const profile = await Profile.findOne({user: req.user.id}).populate('user', ['name', 'avatar']);
         if(!profile){
             return res.status(400).json({msg:'There is no Profile for this user'})
         };
         res.json(profile);
     } catch(err) {
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-Failed to get current user')
     }
 });
 
@@ -55,29 +55,29 @@ router.post('/',[auth, [
         await profile.save();
         res.json(profile);
     } catch(err){
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-failed to create/update user')
     }
 });
 
 //Get all profiles
 router.get('/', async (req, res) => {
     try {
-        const profiles =  await Profile.find().populate('users', ['name', 'avatar']);
+        const profiles =  await Profile.find().populate('user', ['name', 'avatar']);
         res.json(profiles);
     } catch (err) {
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-failed to get all profiles')
     };
 });
 
 //Get profile by id
 router.get('/user/:user_id', async (req, res) => {
     try {
-        const profile = await Profile.findOne({user: req.params.user_id}).populate('users', ['name', 'avatar']);
+        const profile = await Profile.findOne({user: req.params.user_id}).populate('user', ['name', 'avatar']);
         if(!profile) return res.status(400).json({msg:'Profile not found'})
         res.json(profile);
     } catch (err) {
         if(err.kind === 'ObjectId') return res.status(400).json({msg:'Profile not found'})
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-failed to get profile by ID')
     };
 });
 
@@ -89,7 +89,7 @@ router.delete('/', auth, async (req, res) => {
         await User.findOneAndRemove({_id: req.user.id});
         res.json({msg:'User Deleted'});
     } catch (err) {
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-could not delete profile, user, and posts')
     };
 });
 
@@ -115,7 +115,7 @@ router.put('/experience', [auth,[
         res.json(profile);
     } catch (err) {
         console.log(err)
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-could not add profile experience')
     }
 });
 
@@ -128,7 +128,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
         await profile.save();
         res.json(profile)
     } catch (err) {
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-could not delete experience')
     };
 });
 
@@ -155,7 +155,7 @@ router.put('/education', [auth,[
         res.json(profile);
     } catch (err) {
         console.log(err)
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-failed to add profile eduation')
     }
 });
 
@@ -168,7 +168,7 @@ router.delete('/education/:edu_id', auth, async (req, res) => {
         await profile.save();
         res.json(profile)
     } catch (err) {
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error-failed to delete education')
     };
 });
 
@@ -190,7 +190,7 @@ router.get('/github/:username',(req, res) => {
         })
     } catch (err) {
         console.log(err)
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error- could not get gitUsername')
     }
 });
 
