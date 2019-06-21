@@ -1,12 +1,12 @@
 import React, {Fragment, useEffect} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Navbar from './Components/layout/Navbar';
-import Landing from './Components/layout/Landing';
+import Navbar from './Components/Layout/Navbar';
+import Landing from './Components/Layout/Landing';
 import Login from './Components/auth/Login';
 import Register from './Components/auth/Register';
 import store from './store';
 import {Provider} from 'react-redux';
-import Alert from './Components/layout/Alert';
+import Alert from './Components/Layout/Alert';
 import setAuthToken from './utils/setAuthToken';
 import {loadUser} from './actions/auth';
 import Dashboard from './Components/dashboard/Dashboard';
