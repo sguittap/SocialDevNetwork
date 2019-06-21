@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "social network for job seeking developers",
   "main": "server.js",
+  "engines": {
+    "node": "11.13.0"
+  },
   "scripts": {
     "client-install": "npm instal --prefix client",
     "start": "node server.js",
